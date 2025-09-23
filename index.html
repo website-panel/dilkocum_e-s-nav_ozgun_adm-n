@@ -3,106 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Paneli - Canlı Dashboard</title>
+    <title>Öğretmen Paneli - Canlı Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family/Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* ==========================================================================
+           1. TEMEL STİLLER VE DEĞİŞKENLER
+           ========================================================================== */
         :root {
-            --primary-color: #0d3d6e; --primary-dark: #0a2f55;
-            --danger-color: #d9534f; --danger-dark: #c9302c;
-            --success-color: #28a745; --success-dark: #1e7e34;
+            /* Renk Paleti */
+            --primary-color: #0d3d6e;
+            --primary-dark: #0a2f55;
+            --danger-color: #d9534f;
+            --danger-dark: #c9302c;
+            --success-color: #28a745;
+            --success-dark: #1e7e34;
             --warning-color: #f0ad4e;
-            --background-color: #f4f7fa; --card-background: #ffffff;
-            --text-color: #333; --text-light: #667;
-            --border-color: #e0e0e0; --shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+            --info-color: #17a2b8;
 
-            /* YENİ: Kategori Renkleri */
+            /* Arayüz Renkleri */
+            --background-color: #f4f7fa;
+            --card-background: #ffffff;
+            --text-color: #333;
+            --text-light: #667;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+
+            /* Kategori Renkleri */
+            --grammar-color: #0d3d6e;
+            --vocabulary-color: #f0ad4e;
             --preposition-color: #00522e;
             --sentence_completion-color: #6f42c1;
-            --translation-color: #007bff;
+            --translations-color: #007bff;
             --paragraph_completion-color: #fd7e14;
             --paraphrasing-color: #20c997;
             --situation-color: #17a2b8;
             --dialogue-color: #e83e8c;
             --mismatching-color: #343a40;
+            --paragraph_test-color: #dc3545;
         }
+
         *, *::before, *::after { box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: var(--background-color); color: var(--text-color); }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Kaydırma Çubuğu Stili */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #aaa; }
+
+        /* ==========================================================================
+           2. LAYOUT VE CONTAINER
+           ========================================================================== */
         .container { max-width: 1600px; margin: 20px auto; padding: 0 20px; }
-        .top-header { background: linear-gradient(45deg, var(--primary-color), #1a5a96); color: white; padding: 20px 30px; border-radius: 12px; margin-bottom: 25px; box-shadow: var(--shadow); }
+        .top-header {
+            background: linear-gradient(45deg, var(--primary-color), #1a5a96);
+            color: white; padding: 20px 30px; border-radius: 12px;
+            margin-bottom: 25px; box-shadow: var(--shadow);
+        }
         .top-header h1 { font-size: 1.8em; margin: 0; font-weight: 600; }
-        .dashboard-grid { display: grid; grid-template-columns: 1fr; gap: 25px; }
-        .dashboard-card { background-color: var(--card-background); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; }
-        .card-header { padding: 15px 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 10px; }
+
+        .dashboard-grid {
+            display: grid; grid-template-columns: 1fr; gap: 25px;
+        }
+        @media (min-width: 1200px) {
+            .dashboard-grid { grid-template-columns: 1fr 2.5fr; }
+        }
+
+        /* ==========================================================================
+           3. KART STİLLERİ
+           ========================================================================== */
+        .dashboard-card {
+            background-color: var(--card-background);
+            border-radius: 12px; box-shadow: var(--shadow);
+            overflow: hidden; display: flex; flex-direction: column;
+        }
+        .card-header {
+            padding: 15px 20px; border-bottom: 1px solid var(--border-color);
+            display: flex; align-items: center; gap: 12px;
+        }
         .card-header h2 { margin: 0; font-size: 1.2em; font-weight: 600; }
         .card-body { padding: 20px; flex-grow: 1; }
-        
-        @media (min-width: 1200px) { 
-            .dashboard-grid { grid-template-columns: 1fr 2.5fr; } /* Geniş ekran için oran ayarlandı */
+        .placeholder-text { text-align: center; color: var(--text-light); padding: 30px 0; }
+
+        /* ==========================================================================
+           4. AKTİF ÖĞRENCİLER KARTI
+           ========================================================================== */
+        .live-indicator {
+            width: 10px; height: 10px; background-color: var(--success-color);
+            border-radius: 50%; animation: ping 1.5s ease-in-out infinite;
         }
-        
-        /* Aktif Öğrenciler Kartı */
-        .live-indicator { width: 10px; height: 10px; background-color: var(--success-color); border-radius: 50%; animation: ping 1.5s ease-in-out infinite; }
-        @keyframes ping { 0%, 100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); } }
-        /* DÜZENLEME: Aktif öğrenciler listesi artık kaydırılabilir */
-        #aktif-ogrenciler-listesi { list-style: none; padding: 0; margin: 0; max-height: 500px; overflow-y: auto; padding-right: 10px; }
-        .aktif-ogrenci-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 5px; border-bottom: 1px solid #f0f0f0; }
+        @keyframes ping {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+        }
+        #aktif-ogrenciler-listesi {
+            list-style: none; padding: 0; margin: 0;
+            max-height: 500px; overflow-y: auto;
+        }
+        .aktif-ogrenci-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 5px; border-bottom: 1px solid #f0f0f0;
+        }
         .aktif-ogrenci-item:last-child { border-bottom: none; }
         .ogrenci-info { font-weight: 500; }
         .ogrenci-info span { display: block; font-size: 0.8em; color: var(--text-light); }
-        .sinav-turu-badge { font-size: 0.8em; font-weight: 600; padding: 4px 10px; border-radius: 15px; color: white; text-transform: capitalize; }
-        .placeholder-text { text-align: center; color: var(--text-light); padding: 30px 0; }
-        /* YENİ: Öğrenciyi sistemden atma butonu stili */
-        .kick-btn { background: none; border: none; font-size: 1.2em; cursor: pointer; color: var(--text-light); transition: color 0.2s; }
-        .kick-btn:hover { color: var(--danger-color); }
+        .sinav-turu-badge {
+            font-size: 0.8em; font-weight: 600; padding: 4px 10px;
+            border-radius: 15px; color: white; text-transform: capitalize;
+        }
 
-        /* YENİ: Kategori Renkleri CSS */
-        .sinav-turu-badge.grammar { background-color: var(--primary-color); }
-        .sinav-turu-badge.vocabulary { background-color: var(--warning-color); color: #333; }
+        /* Kategori Badge Renkleri */
+        .sinav-turu-badge.grammar { background-color: var(--grammar-color); }
+        .sinav-turu-badge.vocabulary { background-color: var(--vocabulary-color); color: #333; }
         .sinav-turu-badge.preposition { background-color: var(--preposition-color); }
         .sinav-turu-badge.sentence_completion { background-color: var(--sentence_completion-color); }
-        .sinav-turu-badge.translation { background-color: var(--translation-color); }
+        .sinav-turu-badge.translations { background-color: var(--translations-color); }
         .sinav-turu-badge.paragraph_completion { background-color: var(--paragraph_completion-color); }
         .sinav-turu-badge.paraphrasing { background-color: var(--paraphrasing-color); }
         .sinav-turu-badge.situation { background-color: var(--situation-color); }
         .sinav-turu-badge.dialogue { background-color: var(--dialogue-color); }
         .sinav-turu-badge.mismatching { background-color: var(--mismatching-color); }
+        .sinav-turu-badge.paragraph_test { background-color: var(--paragraph_test-color); }
 
 
-        /* Sonuçlar Kartı */
-        .controls { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-        #search-input { padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color); width: 100%; max-width: 300px; font-size: 1em; }
-        .control-buttons button { color: white; border: none; border-radius: 8px; padding: 10px 20px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-        #clear-db-btn { background-color: var(--danger-color); }
-        #clear-db-btn:hover { background-color: var(--danger-dark); }
+        /* ==========================================================================
+           5. SONUÇLAR KARTI VE TABLO
+           ========================================================================== */
+        .controls {
+            display: flex; justify-content: space-between; align-items: center;
+            gap: 15px; margin-bottom: 20px; flex-wrap: wrap;
+        }
+        #search-input {
+            padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color);
+            width: 100%; max-width: 300px; font-size: 1em; transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        #search-input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(13, 61, 110, 0.1); outline: none;}
+
         .results-table-wrapper { width: 100%; overflow-x: auto; }
         .results-table { width: 100%; border-collapse: collapse; }
-        .results-table th, .results-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
+        .results-table th, .results-table td {
+            padding: 12px 15px; text-align: left;
+            border-bottom: 1px solid var(--border-color); white-space: nowrap;
+        }
         .results-table thead { background-color: #f8f9fa; font-size: 0.85em; text-transform: uppercase; }
         .results-table tbody tr:hover { background-color: #f5f5f5; }
+
         .student-name { font-weight: 600; color: var(--primary-color); cursor: pointer; text-decoration: none; }
         .student-name:hover { text-decoration: underline; }
+
         .dogru { color: var(--success-dark); font-weight: 600; }
         .yanlis { color: var(--danger-dark); font-weight: 600; }
-        .net { font-weight: 700; }
-        .action-cell button { background: none; border: none; cursor: pointer; font-size: 1.2em; padding: 5px; }
-        .delete-btn { color: var(--danger-color); }
+        .net { font-weight: 700; color: var(--primary-dark); }
         
-        /* Modal */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 1000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
+        /* ==========================================================================
+           6. BUTONLAR VE İKONLAR
+           ========================================================================== */
+        .btn {
+            border: none; border-radius: 8px; padding: 10px 20px;
+            font-weight: 600; font-family: 'Poppins', sans-serif;
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .btn-danger { background-color: var(--danger-color); color: white; }
+        .btn-danger:hover { background-color: var(--danger-dark); }
+
+        .icon-btn {
+            background: none; border: none; cursor: pointer;
+            padding: 5px; border-radius: 50%; display: inline-flex;
+            align-items: center; justify-content: center;
+            width: 32px; height: 32px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .icon-btn svg { width: 18px; height: 18px; }
+        .icon-btn.kick-btn { color: var(--text-light); }
+        .icon-btn.kick-btn:hover { background-color: #fdeeee; color: var(--danger-color); }
+        .icon-btn.delete-btn { color: var(--text-light); }
+        .icon-btn.delete-btn:hover { background-color: #fdeeee; color: var(--danger-color); }
+
+        /* ==========================================================================
+           7. MODAL PENCERESİ
+           ========================================================================== */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); z-index: 1000;
+            display: none; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
         .modal-overlay.show { display: flex; opacity: 1; }
-        .modal-content { background: var(--card-background); padding: 0; border-radius: 12px; width: 90%; max-width: 800px; max-height: 90vh; display: flex; flex-direction: column; transform: scale(0.95); transition: transform 0.3s ease; }
+        .modal-content {
+            background: var(--card-background); padding: 0; border-radius: 12px;
+            width: 90%; max-width: 800px; max-height: 90vh;
+            display: flex; flex-direction: column;
+            transform: scale(0.95); transition: transform 0.3s ease;
+        }
         .modal-overlay.show .modal-content { transform: scale(1); }
-        .modal-header { padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header {
+            padding: 20px; border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center;
+        }
         .modal-header h2 { margin: 0; font-size: 1.4em; }
-        .modal-close-btn { background: none; border: none; font-size: 2em; cursor: pointer; color: #888; }
+        .modal-close-btn {
+            color: #888; font-size: 2em; line-height: 0;
+            width: 36px; height: 36px;
+        }
+        .modal-close-btn:hover { background-color: #f1f1f1; color: #333; }
         .modal-body { padding: 20px; overflow-y: auto; }
-        #modal-analytics { border: 1px solid var(--border-color); border-radius: 8px; background-color: #fdfdfd; padding: 15px; margin-bottom: 25px; }
+        
+        #modal-analytics {
+            border: 1px solid var(--border-color); border-radius: 8px;
+            background-color: #fdfdfd; padding: 15px; margin-bottom: 25px;
+        }
         #modal-analytics h3 { margin: 0 0 15px 0; text-align: center; font-size: 1.1em; color: var(--primary-dark) }
         .analytics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; text-align: center; }
         .analytics-item .label { font-size: 0.8em; font-weight: 500; color: var(--text-light); text-transform: uppercase;}
         .analytics-item .value { font-size: 2em; font-weight: 700; color: var(--primary-dark); }
+        
         .question-item { padding: 15px 0; border-bottom: 1px solid #f0f0f0; }
         .question-item:last-child { border-bottom: none; }
         .q-text { font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
@@ -114,7 +238,9 @@
 </head>
 <body>
     <div class="container">
-        <header class="top-header"><h1>Öğretmen Paneli - Canlı Dashboard</h1></header>
+        <header class="top-header">
+            <h1>Öğretmen Paneli - Canlı Dashboard</h1>
+        </header>
         
         <main class="dashboard-grid">
             <div class="dashboard-card" id="aktif-ogrenciler-karti">
@@ -129,20 +255,27 @@
             </div>
 
             <div class="dashboard-card" id="sonuclar-karti">
-                <div class="card-header"><h2>Tamamlanan Sınavlar</h2></div>
+                <div class="card-header">
+                    <h2>Tamamlanan Sınavlar</h2>
+                </div>
                 <div class="card-body">
                     <div class="controls">
                         <input type="text" id="search-input" placeholder="Öğrenci adıyla ara...">
                         <div class="control-buttons">
-                            <button id="clear-db-btn">Tüm Sonuçları Sil</button>
+                            <button id="clear-db-btn" class="btn btn-danger">Tüm Sonuçları Sil</button>
                         </div>
                     </div>
                     <div class="results-table-wrapper">
                         <table class="results-table">
                             <thead>
                                 <tr>
-                                    <th>Öğrenci</th><th>Sınav Türü</th><th>Tarih</th>
-                                    <th>D</th><th>Y</th><th>B</th><th>Net</th>
+                                    <th>Öğrenci</th>
+                                    <th>Sınav Türü</th>
+                                    <th>Tarih</th>
+                                    <th>D</th>
+                                    <th>Y</th>
+                                    <th>B</th>
+                                    <th>Net</th>
                                     <th>İşlemler</th>
                                 </tr>
                             </thead>
@@ -159,7 +292,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modal-student-name"></h2>
-                <button class="modal-close-btn">&times;</button>
+                <button class="icon-btn modal-close-btn" aria-label="Kapat">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
             </div>
             <div class="modal-body">
                 <div id="modal-analytics">
@@ -167,7 +302,7 @@
                     <div class="analytics-grid" id="analytics-grid-content"></div>
                 </div>
                 <h3 style="text-align:center; margin-bottom:15px;">Seçilen Sınav Detayları</h3>
-                <ul id="modal-question-list"></ul>
+                <ul id="modal-question-list" style="padding:0; margin:0;"></ul>
             </div>
         </div>
     </div>
@@ -176,130 +311,125 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
         import { getFirestore, collection, query, orderBy, onSnapshot, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
         
+        // --- 1. Firebase ve Değişken Tanımlamaları ---
         const firebaseConfig = { apiKey: "AIzaSyAvaEaHtTwcuCDBIggJGd4w_nzJQM5UlmY", authDomain: "teacher-adminpanel.firebaseapp.com", projectId: "teacher-adminpanel", storageBucket: "teacher-adminpanel.appspot.com", messagingSenderId: "901735644134", appId: "1:901735644134:web:a6aa575a0754de1333f427" };
+        
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-
         const resultsCollection = collection(db, "sonuclar");
         const activeSessionsCollection = collection(db, "aktifOturumlar");
         
         let allResults = [];
 
-        // --- 1. CANLI OTURUM LİSTESİ ---
-        const qActive = query(activeSessionsCollection, orderBy("baslamaZamani", "desc"));
-        onSnapshot(qActive, (snapshot) => {
-            const liste = document.getElementById('aktif-ogrenciler-listesi');
-            liste.innerHTML = '';
+        // DOM Elementleri
+        const activeStudentListEl = document.getElementById('aktif-ogrenciler-listesi');
+        const resultsTableBodyEl = document.getElementById('sonuc-tablosu-govdesi');
+        const searchInputEl = document.getElementById('search-input');
+        const clearDbBtnEl = document.getElementById('clear-db-btn');
+        const modalEl = document.getElementById('details-modal');
+        const modalStudentNameEl = document.getElementById('modal-student-name');
+        const analyticsGridEl = document.getElementById('analytics-grid-content');
+        const questionListEl = document.getElementById('modal-question-list');
+
+        // --- 2. Render Fonksiyonları (Arayüzü Güncelleyenler) ---
+
+        /** Aktif öğrenci listesini arayüzde render eder. */
+        function renderActiveStudents(snapshot) {
+            activeStudentListEl.innerHTML = '';
             if (snapshot.empty) {
-                liste.innerHTML = '<li class="placeholder-text">Şu anda aktif öğrenci bulunmuyor.</li>';
+                activeStudentListEl.innerHTML = '<li class="placeholder-text">Şu anda aktif öğrenci bulunmuyor.</li>';
                 return;
             }
             snapshot.forEach(doc => {
                 const session = doc.data();
+                const sinavTuru = (session.sinavTuru || 'bilinmiyor').replace(/_/g, ' ');
                 const li = document.createElement('li');
                 li.className = 'aktif-ogrenci-item';
-                const sinavTuru = (session.sinavTuru || 'bilinmiyor').replace('_', ' ');
                 li.innerHTML = `
-                    <div class="ogrenci-info">${session.isim} ${session.soyisim}<span>${new Date(session.baslamaZamani.seconds * 1000).toLocaleTimeString('tr-TR')} giriş yaptı</span></div>
+                    <div class="ogrenci-info">${session.isim} ${session.soyisim}
+                        <span>${new Date(session.baslamaZamani.seconds * 1000).toLocaleTimeString('tr-TR')} giriş yaptı</span>
+                    </div>
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <span class="sinav-turu-badge ${session.sinavTuru}">${sinavTuru}</span>
-                        <button class="kick-btn" data-id="${doc.id}" title="Öğrencinin Oturumunu Sonlandır">🚪</button>
+                        <span class="sinav-turu-badge ${(session.sinavTuru || 'bilinmiyor').toLowerCase()}">${sinavTuru}</span>
+                        <button class="icon-btn kick-btn" data-id="${doc.id}" title="Öğrencinin Oturumunu Sonlandır" aria-label="Öğrencinin Oturumunu Sonlandır">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg>
+                        </button>
                     </div>
                 `;
-                liste.appendChild(li);
+                activeStudentListEl.appendChild(li);
             });
-        });
+        }
 
-        // YENİ: Öğrenciyi sistemden atma işlevi
-        document.getElementById('aktif-ogrenciler-listesi').addEventListener('click', async (e) => {
-            if (e.target.classList.contains('kick-btn')) {
-                const sessionId = e.target.dataset.id;
-                if (confirm("Bu öğrencinin aktif oturumunu sonlandırmak istediğinize emin misiniz?")) {
-                    try {
-                        await deleteDoc(doc(db, "aktifOturumlar", sessionId));
-                        // alert("Öğrencinin oturumu sonlandırıldı."); // İsteğe bağlı
-                    } catch (error) {
-                        console.error("Oturum silinirken hata oluştu:", error);
-                        alert("Bir hata oluştu, oturum sonlandırılamadı.");
-                    }
-                }
-            }
-        });
-
-
-        // --- 2. TAMAMLANAN SINAVLAR TABLOSU ---
-        const qResults = query(resultsCollection, orderBy("tarih", "desc"));
-        onSnapshot(qResults, (snapshot) => {
-            allResults = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            renderTable(allResults);
-        });
-
-        function renderTable(results) {
-            const tabloGovdesi = document.getElementById('sonuc-tablosu-govdesi');
-            tabloGovdesi.innerHTML = '';
-             if (results.length === 0) {
-                tabloGovdesi.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px;">Sonuç bulunamadı.</td></tr>';
+        /** Sonuçlar tablosunu verilen veri ile render eder. */
+        function renderResultsTable(results) {
+            resultsTableBodyEl.innerHTML = '';
+            if (results.length === 0) {
+                resultsTableBodyEl.innerHTML = '<tr><td colspan="8" class="placeholder-text">Sonuç bulunamadı.</td></tr>';
                 return;
-             }
+            }
             results.forEach(sonuc => {
                 const tarih = sonuc.tarih ? new Date(sonuc.tarih.seconds * 1000).toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Bilinmiyor';
-                const sinavTuru = (sonuc.sinavTuru || 'Belirtilmemiş').replace('_', ' ');
-                const satir = document.createElement('tr');
-                satir.innerHTML = `
+                const sinavTuru = (sonuc.sinavTuru || 'Belirtilmemiş').replace(/_/g, ' ');
+                const row = document.createElement('tr');
+                row.innerHTML = `
                     <td><a href="#" class="student-name" data-id="${sonuc.id}">${sonuc.isim} ${sonuc.soyisim}</a></td>
-                    <td><span class="sinav-turu-badge ${sonuc.sinavTuru}">${sinavTuru}</span></td>
+                    <td><span class="sinav-turu-badge ${(sonuc.sinavTuru || 'Belirtilmemiş').toLowerCase()}">${sinavTuru}</span></td>
                     <td>${tarih}</td>
                     <td class="dogru">${sonuc.dogruSayisi}</td>
                     <td class="yanlis">${sonuc.yanlisSayisi}</td>
                     <td>${sonuc.bosSayisi}</td>
                     <td class="net">${sonuc.netSayisi}</td>
                     <td class="action-cell">
-                        <button class="delete-btn" data-id="${sonuc.id}" title="Bu Sonucu Sil">🗑️</button>
+                        <button class="icon-btn delete-btn" data-id="${sonuc.id}" title="Bu Sonucu Sil" aria-label="Bu Sonucu Sil">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.144-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.057-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
+                        </button>
                     </td>
                 `;
-                tabloGovdesi.appendChild(satir);
+                resultsTableBodyEl.appendChild(row);
             });
         }
         
-        // --- 3. TABLO İŞLEVLERİ (SİLME, DETAY GÖRME) ---
-        const modal = document.getElementById('details-modal');
-        document.getElementById('sonuc-tablosu-govdesi').addEventListener('click', async (e) => {
-            const target = e.target;
+        // --- 3. Veri ve Hesaplama Fonksiyonları ---
+
+        /** Bir öğrencinin istatistiklerini hesaplar. */
+        function calculateStudentStats(isim, soyisim) {
+            let gunlukSinav = 0, haftalikSinav = 0, toplamSoru = 0;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const weekAgo = new Date(today);
+            weekAgo.setDate(today.getDate() - 7);
+
+            const studentResults = allResults.filter(r => r.isim === isim && r.soyisim === soyisim);
+
+            studentResults.forEach(result => {
+                const resultDate = new Date(result.tarih.seconds * 1000);
+                toplamSoru += (result.dogruSayisi || 0) + (result.yanlisSayisi || 0) + (result.bosSayisi || 0);
+                if (resultDate >= today) gunlukSinav++;
+                if (resultDate >= weekAgo) haftalikSinav++;
+            });
             
-            if (target.classList.contains('delete-btn')) {
-                const sonucId = target.dataset.id;
-                if (confirm("Bu sınav sonucunu kalıcı olarak silmek istediğinize emin misiniz?")) {
-                    await deleteDoc(doc(db, "sonuclar", sonucId));
-                    alert('Sonuç başarıyla silindi.');
-                }
-            }
+            return { gunlukSinav, haftalikSinav, toplamSoru };
+        }
 
-            if (target.classList.contains('student-name')) {
-                e.preventDefault();
-                const sonucId = target.dataset.id;
-                const selectedSonuc = allResults.find(s => s.id === sonucId);
-                if (selectedSonuc) {
-                    await populateAndShowModal(selectedSonuc);
-                }
-            }
-        });
+        // --- 4. Modal İşlevleri ---
 
-        async function populateAndShowModal(sonuc) {
-            const stats = await calculateStudentStats(sonuc.isim, sonuc.soyisim);
-            document.getElementById('analytics-grid-content').innerHTML = `
-                <div class="analytics-item"><div class="label">Bugün Çözülen Sınav</div><div class="value">${stats.gunlukSinav}</div></div>
-                <div class="analytics-item"><div class="label">Haftalık Çözülen Sınav</div><div class="value">${stats.haftalikSinav}</div></div>
-                <div class="analytics-item"><div class="label">Toplam Çözülen Soru</div><div class="value">${stats.toplamSoru}</div></div>
+        /** Modal penceresini öğrenci verileriyle doldurur ve gösterir. */
+        function populateAndShowModal(sonuc) {
+            const stats = calculateStudentStats(sonuc.isim, sonuc.soyisim);
+            
+            modalStudentNameEl.textContent = `${sonuc.isim} ${sonuc.soyisim} - Sınav Detayları`;
+            analyticsGridEl.innerHTML = `
+                <div class="analytics-item"><div class="label">Bugün Çözülen</div><div class="value">${stats.gunlukSinav}</div></div>
+                <div class="analytics-item"><div class="label">Haftalık Çözülen</div><div class="value">${stats.haftalikSinav}</div></div>
+                <div class="analytics-item"><div class="label">Toplam Soru</div><div class="value">${stats.toplamSoru}</div></div>
             `;
             
-            document.getElementById('modal-student-name').textContent = `${sonuc.isim} ${sonuc.soyisim} - Detaylar`;
-            
-            const questionList = document.getElementById('modal-question-list');
-            questionList.innerHTML = '';
-             if (sonuc.sorular && Array.isArray(sonuc.sorular)) {
-                sonuc.sorular.forEach(soru => {
+            questionListEl.innerHTML = '';
+            if (sonuc.sorular && Array.isArray(sonuc.sorular)) {
+                sonuc.sorular.forEach((soru, index) => {
                     const ogrenciCevabi = sonuc.ogrenciCevaplari[soru.id];
                     const dogruCevap = soru.dogruCevap;
+                    
                     let optionsHtml = '<ul class="q-options-list">';
                     if(soru.secenekler && Array.isArray(soru.secenekler)) {
                         soru.secenekler.forEach((optionText, index) => {
@@ -315,62 +445,126 @@
                         });
                     }
                     optionsHtml += '</ul>';
+                    
                     const listItem = document.createElement('li');
                     listItem.className = 'question-item';
-                    listItem.innerHTML = `<div class="q-text"><b>${soru.id}.</b> ${soru.metin}</div> ${optionsHtml}`;
-                    questionList.appendChild(listItem);
+                    listItem.innerHTML = `<div class="q-text"><b>${index + 1}.</b> ${soru.metin}</div> ${optionsHtml}`;
+                    questionListEl.appendChild(listItem);
                 });
-             }
+            } else {
+                 questionListEl.innerHTML = '<li class="placeholder-text">Bu sınav için soru detayı bulunamadı.</li>';
+            }
             
-            modal.classList.add('show');
+            modalEl.classList.add('show');
         }
 
-        // DÜZELTME: Öğrenci istatistikleri artık doğru hesaplanıyor
-        async function calculateStudentStats(isim, soyisim) {
-            let gunlukSinav = 0, haftalikSinav = 0, toplamSoru = 0;
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const weekAgo = new Date(today);
-            weekAgo.setDate(today.getDate() - 7);
+        // --- 5. Olay Dinleyicileri (Event Listeners) ---
 
-            const studentResults = allResults.filter(r => r.isim === isim && r.soyisim === soyisim);
+        function attachEventListeners() {
+            // Aktif öğrenciler listesindeki kick butonu (Event Delegation)
+            activeStudentListEl.addEventListener('click', async (e) => {
+                const kickButton = e.target.closest('.kick-btn');
+                if (kickButton) {
+                    const sessionId = kickButton.dataset.id;
+                    if (confirm("Bu öğrencinin aktif oturumunu sonlandırmak istediğinize emin misiniz?")) {
+                        try {
+                            await deleteDoc(doc(db, "aktifOturumlar", sessionId));
+                        } catch (error) {
+                            console.error("Oturum silinirken hata oluştu:", error);
+                            alert("Bir hata oluştu, oturum sonlandırılamadı.");
+                        }
+                    }
+                }
+            });
 
-            studentResults.forEach(result => {
-                const resultDate = new Date(result.tarih.seconds * 1000);
-                toplamSoru += result.toplamSoru || 0; // Her sınavın soru sayısını topluyoruz
+            // Sonuçlar tablosundaki silme ve detay görme butonları (Event Delegation)
+            resultsTableBodyEl.addEventListener('click', (e) => {
+                const deleteButton = e.target.closest('.delete-btn');
+                const studentNameLink = e.target.closest('.student-name');
 
-                if (resultDate >= today) gunlukSinav++;
-                if (resultDate >= weekAgo) haftalikSinav++;
+                if (deleteButton) {
+                    e.preventDefault();
+                    const sonucId = deleteButton.dataset.id;
+                    if (confirm("Bu sınav sonucunu kalıcı olarak silmek istediğinize emin misiniz?")) {
+                        deleteDoc(doc(db, "sonuclar", sonucId)).catch(error => {
+                             console.error("Sonuç silinirken hata:", error);
+                             alert("Sonuç silinirken bir hata oluştu.");
+                        });
+                    }
+                }
+
+                if (studentNameLink) {
+                    e.preventDefault();
+                    const sonucId = studentNameLink.dataset.id;
+                    const selectedSonuc = allResults.find(s => s.id === sonucId);
+                    if (selectedSonuc) {
+                        populateAndShowModal(selectedSonuc);
+                    }
+                }
             });
             
-            return { gunlukSinav, haftalikSinav, toplamSoru };
+            // Arama kutusu
+            searchInputEl.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredResults = allResults.filter(sonuc => 
+                    `${sonuc.isim} ${sonuc.soyisim}`.toLowerCase().includes(searchTerm)
+                );
+                renderResultsTable(filteredResults);
+            });
+
+            // Tüm sonuçları silme butonu
+            clearDbBtnEl.addEventListener('click', async () => {
+                if (confirm("DİKKAT: Tüm sınav sonuçları kalıcı olarak silinecektir. Bu işlem geri alınamaz. Emin misiniz?")) {
+                    if (prompt("Onaylamak için 'SİL' yazın.") === 'SİL') {
+                        try {
+                            const querySnapshot = await getDocs(resultsCollection);
+                            const deletePromises = querySnapshot.docs.map(docRef => deleteDoc(doc(db, "sonuclar", docRef.id)));
+                            await Promise.all(deletePromises);
+                            alert('Tüm sonuçlar başarıyla silindi.');
+                        } catch(error) {
+                            console.error("Tüm sonuçlar silinirken hata oluştu:", error);
+                            alert("Sonuçlar silinirken bir hata meydana geldi.");
+                        }
+                    } else {
+                        alert('İşlem iptal edildi.');
+                    }
+                }
+            });
+
+            // Modal kapatma
+            modalEl.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal-overlay') || e.target.closest('.modal-close-btn')) {
+                    modalEl.classList.remove('show');
+                }
+            });
         }
 
-        modal.addEventListener('click', (e) => {
-            if (e.target.classList.contains('modal-overlay') || e.target.classList.contains('modal-close-btn')) {
-                modal.classList.remove('show');
-            }
-        });
-        
-        // --- 4. DİĞER FONKSİYONLAR ---
-        document.getElementById('search-input').addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const filteredResults = allResults.filter(sonuc => `${sonuc.isim} ${sonuc.soyisim}`.toLowerCase().includes(searchTerm));
-            renderTable(filteredResults);
-        });
+        // --- 6. Uygulamayı Başlatma ---
 
-        document.getElementById('clear-db-btn').addEventListener('click', async () => {
-            if (confirm("DİKKAT: Tüm sonuçlar kalıcı olarak silinecektir. Emin misiniz?")) {
-                if (prompt("Onaylamak için 'SİL' yazın.") === 'SİL') {
-                    const querySnapshot = await getDocs(resultsCollection);
-                    const deletePromises = querySnapshot.docs.map(docRef => deleteDoc(doc(db, "sonuclar", docRef.id)));
-                    await Promise.all(deletePromises);
-                    alert('Tüm sonuçlar başarıyla silindi.');
+        function initializeAppListeners() {
+            // Aktif oturumları dinle
+            const qActive = query(activeSessionsCollection, orderBy("baslamaZamani", "desc"));
+            onSnapshot(qActive, renderActiveStudents, error => console.error("Aktif oturumlar dinlenirken hata:", error));
+
+            // Tamamlanan sınavları dinle
+            const qResults = query(resultsCollection, orderBy("tarih", "desc"));
+            onSnapshot(qResults, (snapshot) => {
+                allResults = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                // Arama filtresi aktifse onu koruyarak render et, değilse tümünü render et
+                const searchTerm = searchInputEl.value.toLowerCase();
+                if (searchTerm) {
+                     const filteredResults = allResults.filter(sonuc => `${sonuc.isim} ${sonuc.soyisim}`.toLowerCase().includes(searchTerm));
+                     renderResultsTable(filteredResults);
                 } else {
-                    alert('İşlem iptal edildi.');
+                    renderResultsTable(allResults);
                 }
-            }
-        });
+            }, error => console.error("Sonuçlar dinlenirken hata:", error));
+            
+            attachEventListeners();
+        }
+
+        initializeAppListeners();
+
     </script>
 </body>
 </html>
