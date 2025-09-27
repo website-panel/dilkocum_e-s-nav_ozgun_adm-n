@@ -3,284 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Öğretmen Paneli - Canlı Dashboard</title>
+    <title>Öğretmen Paneli - Profesyonel Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ==========================================================================
-           1. TEMEL STİLLER VE DEĞİŞKENLER
-           ========================================================================== */
         :root {
-            /* Renk Paleti */
-            --primary-color: #0d3d6e;
-            --primary-dark: #0a2f55;
-            --danger-color: #d9534f;
-            --danger-dark: #c9302c;
-            --success-color: #28a745;
-            --success-dark: #1e7e34;
-            --warning-color: #f0ad4e;
+            --primary-color: #0d3d6e; --primary-dark: #0a2f55; --primary-light: #e7f0f7;
+            --danger-color: #d9534f; --danger-dark: #c9302c; --danger-light: #fdeded;
+            --success-color: #28a745; --success-dark: #1e7e34; --success-light: #eaf6ec;
+            --warning-color: #f0ad4e; --warning-dark: #ec971f;
             --info-color: #17a2b8;
-
-            /* Arayüz Renkleri */
-            --background-color: #f4f7fa;
-            --card-background: #ffffff;
-            --text-color: #333;
-            --text-light: #667;
-            --border-color: #e0e0e0;
-            --shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
-
-            /* Kategori Renkleri */
-            --grammar-color: #0d3d6e;
-            --vocabulary-color: #f0ad4e;
-            --preposition-color: #00522e;
-            --sentence_completion-color: #6f42c1;
-            --translations-color: #007bff;
-            --paragraph_completion-color: #fd7e14;
-            --paraphrasing-color: #20c997;
-            --situation-color: #17a2b8;
-            --dialogue-color: #e83e8c;
+            --background-color: #f4f7fa; --card-background: #ffffff;
+            --text-color: #333; --text-light: #6c757d; --border-color: #e9ecef;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --grammar-color: #0d3d6e; --vocabulary-color: #f0ad4e; --preposition-color: #00522e;
+            --sentence_completion-color: #6f42c1; --translations-color: #007bff; --paragraph_completion-color: #fd7e14;
+            --paraphrasing-color: #20c997; --situation-color: #17a2b8; --dialogue-color: #e83e8c;
             --mismatching-color: #343a40;
-            --paragraph_test-color: #dc3545;
         }
-
         *, *::before, *::after { box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); color: var(--text-color); margin: 0; -webkit-font-smoothing: antialiased; }
+        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: #f1f1f1; } ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; } ::-webkit-scrollbar-thumb:hover { background: #aaa; }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* Kaydırma Çubuğu Stili */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #aaa; }
-
-        /* ==========================================================================
-           2. LAYOUT VE CONTAINER
-           ========================================================================== */
         .container { max-width: 1600px; margin: 20px auto; padding: 0 20px; }
-        .top-header {
-            background: linear-gradient(45deg, var(--primary-color), #1a5a96);
-            color: white; padding: 20px 30px; border-radius: 12px;
-            margin-bottom: 25px; box-shadow: var(--shadow);
-        }
+        .top-header { background: linear-gradient(45deg, var(--primary-color), #1a5a96); color: white; padding: 20px 30px; border-radius: 12px; margin-bottom: 25px; box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center; }
         .top-header h1 { font-size: 1.8em; margin: 0; font-weight: 600; }
-
-        .dashboard-grid {
-            display: grid; grid-template-columns: 1fr; gap: 25px;
-        }
-        @media (min-width: 1200px) {
-            .dashboard-grid { grid-template-columns: 1fr 2.5fr; }
-        }
-
-        /* ==========================================================================
-           3. KART STİLLERİ
-           ========================================================================== */
-        .dashboard-card {
-            background-color: var(--card-background);
-            border-radius: 12px; box-shadow: var(--shadow);
-            overflow: hidden; display: flex; flex-direction: column;
-        }
-        .card-header {
-            padding: 15px 20px; border-bottom: 1px solid var(--border-color);
-            display: flex; align-items: center; gap: 12px;
-        }
+        
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .dashboard-card { background-color: var(--card-background); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; }
+        .card-header { padding: 15px 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; background-color: #fbfdff; }
         .card-header h2 { margin: 0; font-size: 1.2em; font-weight: 600; }
         .card-body { padding: 20px; flex-grow: 1; }
-        .placeholder-text { text-align: center; color: var(--text-light); padding: 30px 0; }
+        
+        .stat-card { padding: 20px; text-align: center; }
+        .stat-card .value { font-size: 2.5em; font-weight: 700; color: var(--primary-dark); margin-bottom: 5px; }
+        .stat-card .label { font-size: 1em; font-weight: 500; color: var(--text-light); }
 
-        /* ==========================================================================
-           4. AKTİF ÖĞRENCİLER KARTI
-           ========================================================================== */
-        .live-indicator {
-            width: 10px; height: 10px; background-color: var(--success-color);
-            border-radius: 50%; animation: ping 1.5s ease-in-out infinite;
-        }
-        @keyframes ping {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
-        }
-        #aktif-ogrenciler-listesi {
-            list-style: none; padding: 0; margin: 0;
-            max-height: 500px; overflow-y: auto;
-        }
-        .aktif-ogrenci-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 5px; border-bottom: 1px solid #f0f0f0;
-        }
-        .aktif-ogrenci-item:last-child { border-bottom: none; }
-        .ogrenci-info { font-weight: 500; }
-        .ogrenci-info span { display: block; font-size: 0.8em; color: var(--text-light); }
-        .sinav-turu-badge {
-            font-size: 0.8em; font-weight: 600; padding: 4px 10px;
-            border-radius: 15px; color: white; text-transform: capitalize;
-        }
-
-        /* Kategori Badge Renkleri */
-        .sinav-turu-badge.grammar { background-color: var(--grammar-color); }
-        .sinav-turu-badge.vocabulary { background-color: var(--vocabulary-color); color: #333; }
-        .sinav-turu-badge.preposition { background-color: var(--preposition-color); }
-        .sinav-turu-badge.sentence_completion { background-color: var(--sentence_completion-color); }
-        .sinav-turu-badge.translations { background-color: var(--translations-color); }
-        .sinav-turu-badge.paragraph_completion { background-color: var(--paragraph_completion-color); }
-        .sinav-turu-badge.paraphrasing { background-color: var(--paraphrasing-color); }
-        .sinav-turu-badge.situation { background-color: var(--situation-color); }
-        .sinav-turu-badge.dialogue { background-color: var(--dialogue-color); }
-        .sinav-turu-badge.mismatching { background-color: var(--mismatching-color); }
-        .sinav-turu-badge.paragraph_test { background-color: var(--paragraph_test-color); }
-
-
-        /* ==========================================================================
-           5. SONUÇLAR KARTI VE TABLO
-           ========================================================================== */
-        .controls {
-            display: flex; justify-content: space-between; align-items: center;
-            gap: 15px; margin-bottom: 20px; flex-wrap: wrap;
-        }
-        #search-input {
-            padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color);
-            width: 100%; max-width: 300px; font-size: 1em; transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        #search-input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(13, 61, 110, 0.1); outline: none;}
-
+        .controls { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .control-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .control-group label { font-weight: 500; font-size: 0.9em; }
+        #search-input { padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color); font-family: 'Poppins', sans-serif; font-size: 1em; transition: all 0.2s; min-width: 250px; }
+        #search-input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(13, 61, 110, 0.1); outline: none; }
+        
         .results-table-wrapper { width: 100%; overflow-x: auto; }
         .results-table { width: 100%; border-collapse: collapse; }
-        .results-table th, .results-table td {
-            padding: 12px 15px; text-align: left;
-            border-bottom: 1px solid var(--border-color); white-space: nowrap;
-        }
-        .results-table thead { background-color: #f8f9fa; font-size: 0.85em; text-transform: uppercase; }
-        .results-table tbody tr:hover { background-color: #f5f5f5; }
-
-        .student-name { font-weight: 600; color: var(--primary-color); cursor: pointer; text-decoration: none; }
-        .student-name:hover { text-decoration: underline; }
-
-        .dogru { color: var(--success-dark); font-weight: 600; }
-        .yanlis { color: var(--danger-dark); font-weight: 600; }
-        .net { font-weight: 700; color: var(--primary-dark); }
+        .results-table th, .results-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); white-space: nowrap; vertical-align: middle; }
+        .results-table thead { background-color: #f8f9fa; font-size: 0.85em; text-transform: uppercase; color: var(--text-light); }
+        .results-table tbody tr { cursor: pointer; transition: background-color 0.2s; }
+        .results-table tbody tr:hover { background-color: var(--primary-light); }
+        .student-info { display: flex; align-items: center; gap: 12px; }
+        .student-avatar { width: 40px; height: 40px; border-radius: 50%; background-color: var(--primary-color); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 1.1em; flex-shrink: 0; }
+        .student-name { font-weight: 600; color: var(--primary-dark); }
+        .last-exam-date { font-size: 0.9em; color: var(--text-light); }
+        .placeholder-text { text-align: center; color: var(--text-light); padding: 40px 0; font-size: 1.1em; }
         
-        /* ==========================================================================
-           6. BUTONLAR VE İKONLAR
-           ========================================================================== */
-        .btn {
-            border: none; border-radius: 8px; padding: 10px 20px;
-            font-weight: 600; font-family: 'Poppins', sans-serif;
-            cursor: pointer; transition: all 0.2s ease;
-        }
+        .btn { border: none; border-radius: 8px; padding: 10px 20px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-danger { background-color: var(--danger-color); color: white; }
-        .btn-danger:hover { background-color: var(--danger-dark); }
-
-        .icon-btn {
-            background: none; border: none; cursor: pointer;
-            padding: 5px; border-radius: 50%; display: inline-flex;
-            align-items: center; justify-content: center;
-            width: 32px; height: 32px;
-            transition: background-color 0.2s, color 0.2s;
-        }
-        .icon-btn svg { width: 18px; height: 18px; }
-        .icon-btn.kick-btn { color: var(--text-light); }
-        .icon-btn.kick-btn:hover { background-color: #fdeeee; color: var(--danger-color); }
-        .icon-btn.delete-btn { color: var(--text-light); }
-        .icon-btn.delete-btn:hover { background-color: #fdeeee; color: var(--danger-color); }
-
-        /* ==========================================================================
-           7. MODAL PENCERESİ
-           ========================================================================== */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6); z-index: 1000;
-            display: none; justify-content: center; align-items: center;
-            opacity: 0; transition: opacity 0.3s ease;
-        }
+        .btn-danger:hover { background-color: var(--danger-dark); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(217, 83, 79, 0.2); }
+        .btn-logout { background-color: var(--text-light); color: white; }
+        .btn-logout:hover { background-color: #555; }
+        
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 1000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; backdrop-filter: blur(5px); }
         .modal-overlay.show { display: flex; opacity: 1; }
-        .modal-content {
-            background: var(--card-background); padding: 0; border-radius: 12px;
-            width: 90%; max-width: 800px; max-height: 90vh;
-            display: flex; flex-direction: column;
-            transform: scale(0.95); transition: transform 0.3s ease;
-        }
+        .modal-content { background: var(--card-background); padding: 0; border-radius: 12px; width: 90%; max-width: 900px; max-height: 90vh; display: flex; flex-direction: column; transform: scale(0.95); transition: transform 0.3s ease; }
         .modal-overlay.show .modal-content { transform: scale(1); }
-        .modal-header {
-            padding: 20px; border-bottom: 1px solid var(--border-color);
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .modal-header h2 { margin: 0; font-size: 1.4em; }
-        .modal-close-btn {
-            color: #888; font-size: 2em; line-height: 0;
-            width: 36px; height: 36px;
-        }
-        .modal-close-btn:hover { background-color: #f1f1f1; color: #333; }
-        .modal-body { padding: 20px; overflow-y: auto; }
+        .modal-header { padding: 15px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h2 { margin: 0; font-size: 1.3em; line-height: 1.4; color: var(--primary-dark); }
+        .modal-body { padding: 25px; overflow-y: auto; }
+        .modal-close-btn { color: #888; font-size: 2.2em; line-height: 0; width: 40px; height: 40px; background: none; border: none; cursor: pointer; border-radius: 50%; transition: all 0.2s; }
+        .modal-close-btn:hover { background-color: #f1f1f1; color: #333; transform: rotate(90deg); }
         
-        #modal-analytics {
-            border: 1px solid var(--border-color); border-radius: 8px;
-            background-color: #fdfdfd; padding: 15px; margin-bottom: 25px;
-        }
-        #modal-analytics h3 { margin: 0 0 15px 0; text-align: center; font-size: 1.1em; color: var(--primary-dark) }
-        .analytics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; text-align: center; }
-        .analytics-item .label { font-size: 0.8em; font-weight: 500; color: var(--text-light); text-transform: uppercase;}
-        .analytics-item .value { font-size: 2em; font-weight: 700; color: var(--primary-dark); }
+        /* Modal İçerik Stilleri */
+        .student-summary-header { background-color: var(--primary-light); border-radius: 8px; padding: 20px; margin-bottom: 25px; text-align: center; }
+        .student-summary-header h3 { margin: 0 0 15px 0; font-size: 1.5em; font-weight: 700; color: var(--primary-dark); }
+        .student-summary-stats { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; }
+        .student-summary-stats .stat { font-size: 1em; color: var(--text-light); }
+        .student-summary-stats .stat strong { color: var(--primary-dark); font-weight: 600; font-size: 1.2em; }
+        .exam-list-item { display: flex; align-items: center; padding: 15px; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 10px; transition: all 0.2s ease; border-left-width: 5px; }
+        .exam-list-item:hover { border-color: var(--primary-color); background-color: #fafcff; transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .exam-list-item .info { flex-grow: 1; cursor: pointer; }
+        .exam-list-item .title { font-weight: 600; font-size: 1.1em; color: var(--primary-dark); }
+        .exam-list-item .date { font-size: 0.9em; color: var(--text-light); margin-top: 2px; }
+        .exam-actions { display: flex; align-items: center; gap: 10px; }
+        .exam-stats { display: flex; gap: 15px; font-size: 0.9em; text-align: right; }
+        .stat-detail strong { font-weight: 700; font-size: 1.1em; }
+        .stat-detail.dogru { color: var(--success-dark); }
+        .stat-detail.yanlis { color: var(--danger-dark); }
+        .stat-detail.bos { color: var(--text-light); }
+        .stat-detail.net { color: var(--primary-dark); font-weight: 600; }
+        .delete-exam-btn { background: none; border: none; color: var(--text-light); cursor: pointer; padding: 5px; border-radius: 50%; transition: all 0.2s; }
+        .delete-exam-btn:hover { background-color: var(--danger-light); color: var(--danger-dark); transform: scale(1.1); }
+        .delete-exam-btn svg { width: 20px; height: 20px; }
         
+        #modal-exam-detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap:15px; }
         .question-item { padding: 15px 0; border-bottom: 1px solid #f0f0f0; }
         .question-item:last-child { border-bottom: none; }
-        .q-text { font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
-        .q-options-list { list-style: none; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
-        .q-option { padding: 5px; border-radius: 4px; border: 1px solid transparent;}
-        .q-option.correct-answer { background-color: #eaf6ec; border-color: #a3d9b1; font-weight: 600; }
-        .q-option.student-answer-incorrect { background-color: #fdeded; border-color: #f5c6cb; text-decoration: line-through; }
+        .q-text { font-weight: 600; margin-bottom: 15px; line-height: 1.6; }
+        .q-options-list { list-style: none; padding-left: 0; display: flex; flex-direction: column; gap: 8px; }
+        .q-option { display: flex; align-items: flex-start; gap: 10px; padding: 8px 12px; border-radius: 6px; border: 1px solid transparent; }
+        .q-option.correct-answer { background-color: var(--success-light); border-color: #a3d9b1; font-weight: 600; }
+        .q-option.student-answer-incorrect { background-color: var(--danger-light); border-color: #f5c6cb; text-decoration: line-through; }
+        .q-option-icon { width: 20px; flex-shrink: 0; text-align: center; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header class="top-header">
-            <h1>Öğretmen Paneli - Canlı Dashboard</h1>
-        </header>
-        
-        <main class="dashboard-grid">
-            <div class="dashboard-card" id="aktif-ogrenciler-karti">
-                <div class="card-header">
-                    <span class="live-indicator"></span>
-                    <h2>Aktif Öğrenciler</h2>
-                </div>
-                <div class="card-body">
-                    <ul id="aktif-ogrenciler-listesi">
-                        </ul>
-                </div>
-            </div>
+    <div id="login-modal" class="modal-overlay show">
+        <div class="modal-content" style="max-width: 420px; padding: 30px;">
+            <h2 style="text-align: center; color: var(--primary-dark);">Öğretmen Paneli Girişi</h2>
+            <form id="login-form">
+                <div style="margin-bottom: 15px;"><label for="email">E-posta:</label><input type="email" id="email" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
+                <div style="margin-bottom: 20px;"><label for="password">Şifre:</label><input type="password" id="password" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
+                <button type="submit" class="btn" style="width: 100%; background-color: var(--primary-color); color: white;">Giriş Yap</button>
+                <p id="login-error" style="color: var(--danger-color); text-align: center; margin-top: 15px; display: none;"></p>
+            </form>
+        </div>
+    </div>
 
-            <div class="dashboard-card" id="sonuclar-karti">
-                <div class="card-header">
-                    <h2>Tamamlanan Sınavlar</h2>
-                </div>
+    <div class="container" id="main-container" style="display:none;">
+        <header class="top-header">
+            <h1>Öğretmen Paneli</h1>
+            <button id="logout-btn" class="btn btn-logout">Çıkış Yap</button>
+        </header>
+        <div class="dashboard-grid">
+            <div class="dashboard-card stat-card"><div id="total-students" class="value">-</div><div class="label">Toplam Öğrenci</div></div>
+            <div class="dashboard-card stat-card"><div id="total-exams" class="value">-</div><div class="label">Toplam Çözülen Sınav</div></div>
+            <div class="dashboard-card stat-card"><div id="avg-net" class="value">-</div><div class="label">Genel Başarı Ortalaması</div></div>
+        </div>
+        <main style="margin-top: 25px;">
+            <div class="dashboard-card">
+                <div class="card-header"><h2>Öğrenci Sınav Sonuçları</h2></div>
                 <div class="card-body">
-                    <div class="controls">
-                        <input type="text" id="search-input" placeholder="Öğrenci adıyla ara...">
-                        <div class="control-buttons">
-                            <button id="clear-db-btn" class="btn btn-danger">Tüm Sonuçları Sil</button>
-                        </div>
-                    </div>
+                    <div class="controls"><div class="control-group"><input type="text" id="search-input" placeholder="Öğrenci adıyla ara..."></div></div>
                     <div class="results-table-wrapper">
                         <table class="results-table">
-                            <thead>
-                                <tr>
-                                    <th>Öğrenci</th>
-                                    <th>Sınav Türü</th>
-                                    <th>Tarih</th>
-                                    <th>D</th>
-                                    <th>Y</th>
-                                    <th>B</th>
-                                    <th>Net</th>
-                                    <th>İşlemler</th>
-                                </tr>
-                            </thead>
-                            <tbody id="sonuc-tablosu-govdesi">
-                                </tbody>
+                            <thead><tr><th>Öğrenci</th><th>Çözülen Sınav Sayısı</th><th>Son Aktivite</th></tr></thead>
+                            <tbody id="student-table-body"></tbody>
                         </table>
                     </div>
                 </div>
@@ -290,281 +148,331 @@
 
     <div id="details-modal" class="modal-overlay">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modal-student-name"></h2>
-                <button class="icon-btn modal-close-btn" aria-label="Kapat">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
-            </div>
+            <div class="modal-header"><h2 id="modal-title"></h2><button class="modal-close-btn">&times;</button></div>
             <div class="modal-body">
-                <div id="modal-analytics">
-                    <h3>Genel Performans Analizi</h3>
-                    <div class="analytics-grid" id="analytics-grid-content"></div>
-                </div>
-                <h3 style="text-align:center; margin-bottom:15px;">Seçilen Sınav Detayları</h3>
-                <ul id="modal-question-list" style="padding:0; margin:0;"></ul>
+                <div id="modal-student-summary"></div>
+                <div id="modal-exam-list"></div>
+                <div id="modal-exam-detail" style="display:none;"></div>
             </div>
         </div>
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-        import { getFirestore, collection, query, orderBy, onSnapshot, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+        import { getFirestore, collection, collectionGroup, query, onSnapshot, getDocs, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
         
-        // --- 1. Firebase ve Değişken Tanımlamaları ---
         const firebaseConfig = { apiKey: "AIzaSyAvaEaHtTwcuCDBIggJGd4w_nzJQM5UlmY", authDomain: "teacher-adminpanel.firebaseapp.com", projectId: "teacher-adminpanel", storageBucket: "teacher-adminpanel.appspot.com", messagingSenderId: "901735644134", appId: "1:901735644134:web:a6aa575a0754de1333f427" };
         
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
-        const resultsCollection = collection(db, "sonuclar");
-        const activeSessionsCollection = collection(db, "aktifOturumlar");
         
-        let allResults = [];
+        let allStudents = {};
+        let unsubscribe;
+        let currentOpenStudent = null;
+        let currentOpenExam = null;
 
-        // DOM Elementleri
-        const activeStudentListEl = document.getElementById('aktif-ogrenciler-listesi');
-        const resultsTableBodyEl = document.getElementById('sonuc-tablosu-govdesi');
-        const searchInputEl = document.getElementById('search-input');
-        const clearDbBtnEl = document.getElementById('clear-db-btn');
-        const modalEl = document.getElementById('details-modal');
-        const modalStudentNameEl = document.getElementById('modal-student-name');
-        const analyticsGridEl = document.getElementById('analytics-grid-content');
-        const questionListEl = document.getElementById('modal-question-list');
+        const ICONS = {
+            DELETE: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.144-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.057-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>`
+        };
 
-        // --- 2. Render Fonksiyonları (Arayüzü Güncelleyenler) ---
+        const ui = {
+            loginModal: document.getElementById('login-modal'),
+            loginForm: document.getElementById('login-form'),
+            loginError: document.getElementById('login-error'),
+            mainContainer: document.getElementById('main-container'),
+            logoutBtn: document.getElementById('logout-btn'),
+            searchInput: document.getElementById('search-input'),
+            studentTableBody: document.getElementById('student-table-body'),
+            modal: document.getElementById('details-modal'),
+            modalTitle: document.getElementById('modal-title'),
+            modalStudentSummary: document.getElementById('modal-student-summary'),
+            modalExamList: document.getElementById('modal-exam-list'),
+            modalExamDetail: document.getElementById('modal-exam-detail'),
+            modalCloseBtns: document.querySelectorAll('.modal-close-btn'),
+            totalStudentsCard: document.getElementById('total-students'),
+            totalExamsCard: document.getElementById('total-exams'),
+            avgNetCard: document.getElementById('avg-net')
+        };
 
-        /** Aktif öğrenci listesini arayüzde render eder. */
-        function renderActiveStudents(snapshot) {
-            activeStudentListEl.innerHTML = '';
-            if (snapshot.empty) {
-                activeStudentListEl.innerHTML = '<li class="placeholder-text">Şu anda aktif öğrenci bulunmuyor.</li>';
-                return;
-            }
-            snapshot.forEach(doc => {
-                const session = doc.data();
-                const sinavTuru = (session.sinavTuru || 'bilinmiyor').replace(/_/g, ' ');
-                const li = document.createElement('li');
-                li.className = 'aktif-ogrenci-item';
-                li.innerHTML = `
-                    <div class="ogrenci-info">${session.isim} ${session.soyisim}
-                        <span>${new Date(session.baslamaZamani.seconds * 1000).toLocaleTimeString('tr-TR')} giriş yaptı</span>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span class="sinav-turu-badge ${(session.sinavTuru || 'bilinmiyor').toLowerCase()}">${sinavTuru}</span>
-                        <button class="icon-btn kick-btn" data-id="${doc.id}" title="Öğrencinin Oturumunu Sonlandır" aria-label="Öğrencinin Oturumunu Sonlandır">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg>
-                        </button>
-                    </div>
-                `;
-                activeStudentListEl.appendChild(li);
-            });
-        }
-
-        /** Sonuçlar tablosunu verilen veri ile render eder. */
-        function renderResultsTable(results) {
-            resultsTableBodyEl.innerHTML = '';
-            if (results.length === 0) {
-                resultsTableBodyEl.innerHTML = '<tr><td colspan="8" class="placeholder-text">Sonuç bulunamadı.</td></tr>';
-                return;
-            }
-            results.forEach(sonuc => {
-                const tarih = sonuc.tarih ? new Date(sonuc.tarih.seconds * 1000).toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Bilinmiyor';
-                const sinavTuru = (sonuc.sinavTuru || 'Belirtilmemiş').replace(/_/g, ' ');
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td><a href="#" class="student-name" data-id="${sonuc.id}">${sonuc.isim} ${sonuc.soyisim}</a></td>
-                    <td><span class="sinav-turu-badge ${(sonuc.sinavTuru || 'Belirtilmemiş').toLowerCase()}">${sinavTuru}</span></td>
-                    <td>${tarih}</td>
-                    <td class="dogru">${sonuc.dogruSayisi}</td>
-                    <td class="yanlis">${sonuc.yanlisSayisi}</td>
-                    <td>${sonuc.bosSayisi}</td>
-                    <td class="net">${sonuc.netSayisi}</td>
-                    <td class="action-cell">
-                        <button class="icon-btn delete-btn" data-id="${sonuc.id}" title="Bu Sonucu Sil" aria-label="Bu Sonucu Sil">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.144-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.057-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
-                        </button>
-                    </td>
-                `;
-                resultsTableBodyEl.appendChild(row);
-            });
-        }
-        
-        // --- 3. Veri ve Hesaplama Fonksiyonları ---
-
-        /** Bir öğrencinin istatistiklerini hesaplar. */
-        function calculateStudentStats(isim, soyisim) {
-            let gunlukSinav = 0, haftalikSinav = 0, toplamSoru = 0;
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const weekAgo = new Date(today);
-            weekAgo.setDate(today.getDate() - 7);
-
-            const studentResults = allResults.filter(r => r.isim === isim && r.soyisim === soyisim);
-
-            studentResults.forEach(result => {
-                const resultDate = new Date(result.tarih.seconds * 1000);
-                toplamSoru += (result.dogruSayisi || 0) + (result.yanlisSayisi || 0) + (result.bosSayisi || 0);
-                if (resultDate >= today) gunlukSinav++;
-                if (resultDate >= weekAgo) haftalikSinav++;
-            });
-            
-            return { gunlukSinav, haftalikSinav, toplamSoru };
-        }
-
-        // --- 4. Modal İşlevleri ---
-
-        /** Modal penceresini öğrenci verileriyle doldurur ve gösterir. */
-        function populateAndShowModal(sonuc) {
-            const stats = calculateStudentStats(sonuc.isim, sonuc.soyisim);
-            
-            modalStudentNameEl.textContent = `${sonuc.isim} ${sonuc.soyisim} - Sınav Detayları`;
-            analyticsGridEl.innerHTML = `
-                <div class="analytics-item"><div class="label">Bugün Çözülen</div><div class="value">${stats.gunlukSinav}</div></div>
-                <div class="analytics-item"><div class="label">Haftalık Çözülen</div><div class="value">${stats.haftalikSinav}</div></div>
-                <div class="analytics-item"><div class="label">Toplam Soru</div><div class="value">${stats.toplamSoru}</div></div>
-            `;
-            
-            questionListEl.innerHTML = '';
-            if (sonuc.sorular && Array.isArray(sonuc.sorular)) {
-                sonuc.sorular.forEach((soru, index) => {
-                    const ogrenciCevabi = sonuc.ogrenciCevaplari[soru.id];
-                    const dogruCevap = soru.dogruCevap;
-                    
-                    let optionsHtml = '<ul class="q-options-list">';
-                    if(soru.secenekler && Array.isArray(soru.secenekler)) {
-                        soru.secenekler.forEach((optionText, index) => {
-                            const optionLetter = String.fromCharCode(65 + index);
-                            let optionClass = 'q-option';
-                            if (optionLetter.toUpperCase() === (dogruCevap || '').toUpperCase()) {
-                                optionClass += ' correct-answer';
-                            }
-                            if (optionLetter.toUpperCase() === (ogrenciCevabi || '').toUpperCase() && (ogrenciCevabi || '').toUpperCase() !== (dogruCevap || '').toUpperCase()) {
-                                optionClass += ' student-answer-incorrect';
-                            }
-                            optionsHtml += `<li class="${optionClass}"><b>${optionLetter})</b> ${optionText}</li>`;
-                        });
-                    }
-                    optionsHtml += '</ul>';
-                    
-                    const listItem = document.createElement('li');
-                    listItem.className = 'question-item';
-                    listItem.innerHTML = `<div class="q-text"><b>${index + 1}.</b> ${soru.metin}</div> ${optionsHtml}`;
-                    questionListEl.appendChild(listItem);
-                });
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                ui.loginModal.classList.remove('show');
+                ui.mainContainer.style.display = 'block';
+                listenForResults();
             } else {
-                 questionListEl.innerHTML = '<li class="placeholder-text">Bu sınav için soru detayı bulunamadı.</li>';
+                ui.loginModal.classList.add('show');
+                ui.mainContainer.style.display = 'none';
+                if (unsubscribe) unsubscribe();
             }
-            
-            modalEl.classList.add('show');
+        });
+
+        function processResults(exams) {
+            const studentData = {};
+            exams.forEach(exam => {
+                const userId = exam.userId;
+                if (!studentData[userId]) {
+                    studentData[userId] = {
+                        userId: userId,
+                        isim: exam.isim,
+                        soyisim: '',
+                        exams: []
+                    };
+                }
+                studentData[userId].exams.push(exam);
+            });
+            allStudents = studentData;
+            updateDashboard();
         }
 
-        // --- 5. Olay Dinleyicileri (Event Listeners) ---
-
-        function attachEventListeners() {
-            // Aktif öğrenciler listesindeki kick butonu (Event Delegation)
-            activeStudentListEl.addEventListener('click', async (e) => {
-                const kickButton = e.target.closest('.kick-btn');
-                if (kickButton) {
-                    const sessionId = kickButton.dataset.id;
-                    if (confirm("Bu öğrencinin aktif oturumunu sonlandırmak istediğinize emin misiniz?")) {
-                        try {
-                            await deleteDoc(doc(db, "aktifOturumlar", sessionId));
-                        } catch (error) {
-                            console.error("Oturum silinirken hata oluştu:", error);
-                            alert("Bir hata oluştu, oturum sonlandırılamadı.");
-                        }
-                    }
+        async function fetchStudentDetails() {
+            const usersRef = collection(db, "kullanicilar");
+            const snapshot = await getDocs(usersRef);
+            snapshot.forEach(doc => {
+                if (allStudents[doc.id]) {
+                    allStudents[doc.id].isim = doc.data().isim;
+                    allStudents[doc.id].soyisim = doc.data().soyisim;
                 }
             });
-
-            // Sonuçlar tablosundaki silme ve detay görme butonları (Event Delegation)
-            resultsTableBodyEl.addEventListener('click', (e) => {
-                const deleteButton = e.target.closest('.delete-btn');
-                const studentNameLink = e.target.closest('.student-name');
-
-                if (deleteButton) {
-                    e.preventDefault();
-                    const sonucId = deleteButton.dataset.id;
-                    if (confirm("Bu sınav sonucunu kalıcı olarak silmek istediğinize emin misiniz?")) {
-                        deleteDoc(doc(db, "sonuclar", sonucId)).catch(error => {
-                             console.error("Sonuç silinirken hata:", error);
-                             alert("Sonuç silinirken bir hata oluştu.");
-                        });
-                    }
-                }
-
-                if (studentNameLink) {
-                    e.preventDefault();
-                    const sonucId = studentNameLink.dataset.id;
-                    const selectedSonuc = allResults.find(s => s.id === sonucId);
-                    if (selectedSonuc) {
-                        populateAndShowModal(selectedSonuc);
-                    }
-                }
-            });
-            
-            // Arama kutusu
-            searchInputEl.addEventListener('input', (e) => {
-                const searchTerm = e.target.value.toLowerCase();
-                const filteredResults = allResults.filter(sonuc => 
-                    `${sonuc.isim} ${sonuc.soyisim}`.toLowerCase().includes(searchTerm)
-                );
-                renderResultsTable(filteredResults);
-            });
-
-            // Tüm sonuçları silme butonu
-            clearDbBtnEl.addEventListener('click', async () => {
-                if (confirm("DİKKAT: Tüm sınav sonuçları kalıcı olarak silinecektir. Bu işlem geri alınamaz. Emin misiniz?")) {
-                    if (prompt("Onaylamak için 'SİL' yazın.") === 'SİL') {
-                        try {
-                            const querySnapshot = await getDocs(resultsCollection);
-                            const deletePromises = querySnapshot.docs.map(docRef => deleteDoc(doc(db, "sonuclar", docRef.id)));
-                            await Promise.all(deletePromises);
-                            alert('Tüm sonuçlar başarıyla silindi.');
-                        } catch(error) {
-                            console.error("Tüm sonuçlar silinirken hata oluştu:", error);
-                            alert("Sonuçlar silinirken bir hata meydana geldi.");
-                        }
-                    } else {
-                        alert('İşlem iptal edildi.');
-                    }
-                }
-            });
-
-            // Modal kapatma
-            modalEl.addEventListener('click', (e) => {
-                if (e.target.classList.contains('modal-overlay') || e.target.closest('.modal-close-btn')) {
-                    modalEl.classList.remove('show');
-                }
-            });
+            updateDashboard();
         }
 
-        // --- 6. Uygulamayı Başlatma ---
-
-        function initializeAppListeners() {
-            // Aktif oturumları dinle
-            const qActive = query(activeSessionsCollection, orderBy("baslamaZamani", "desc"));
-            onSnapshot(qActive, renderActiveStudents, error => console.error("Aktif oturumlar dinlenirken hata:", error));
-
-            // Tamamlanan sınavları dinle
-            const qResults = query(resultsCollection, orderBy("tarih", "desc"));
-            onSnapshot(qResults, (snapshot) => {
-                allResults = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                // Arama filtresi aktifse onu koruyarak render et, değilse tümünü render et
-                const searchTerm = searchInputEl.value.toLowerCase();
-                if (searchTerm) {
-                     const filteredResults = allResults.filter(sonuc => `${sonuc.isim} ${sonuc.soyisim}`.toLowerCase().includes(searchTerm));
-                     renderResultsTable(filteredResults);
-                } else {
-                    renderResultsTable(allResults);
-                }
-            }, error => console.error("Sonuçlar dinlenirken hata:", error));
-            
-            attachEventListeners();
+        function listenForResults() {
+            if (unsubscribe) unsubscribe();
+            const examsQuery = query(collectionGroup(db, 'sinavlar'));
+            unsubscribe = onSnapshot(examsQuery, (snapshot) => {
+                const allExams = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    const pathParts = doc.ref.path.split('/');
+                    const userId = pathParts[1];
+                    return { id: doc.id, userId, ...data };
+                });
+                processResults(allExams);
+                fetchStudentDetails();
+            }, error => console.error("Sınavlar dinlenirken hata:", error));
         }
 
-        initializeAppListeners();
+        function updateDashboard() {
+            const studentArray = Object.values(allStudents);
+            const totalExams = studentArray.reduce((sum, student) => sum + student.exams.length, 0);
+            const totalNet = studentArray.reduce((sum, student) => sum + student.exams.reduce((netSum, exam) => netSum + parseFloat(exam.netSayisi || 0), 0), 0);
+            
+            ui.totalStudentsCard.textContent = studentArray.length;
+            ui.totalExamsCard.textContent = totalExams;
+            ui.avgNetCard.textContent = totalExams > 0 ? (totalNet / totalExams).toFixed(2) : '0.00';
 
+            const searchTerm = ui.searchInput.value.toLowerCase();
+            const filteredStudents = studentArray.filter(student =>
+                `${student.isim} ${student.soyisim}`.toLowerCase().includes(searchTerm)
+            );
+            renderStudentTable(filteredStudents);
+        }
+
+        function renderStudentTable(students) {
+            ui.studentTableBody.innerHTML = '';
+            if (students.length === 0) {
+                ui.studentTableBody.innerHTML = '<tr><td colspan="3" class="placeholder-text">Öğrenci bulunamadı.</td></tr>';
+                return;
+            }
+            students.sort((a, b) => {
+                const lastExamA = Math.max(...a.exams.map(e => e.tarih?.seconds || 0));
+                const lastExamB = Math.max(...b.exams.map(e => e.tarih?.seconds || 0));
+                return lastExamB - lastExamA;
+            });
+
+            students.forEach(student => {
+                const lastExam = student.exams.reduce((latest, current) => (current.tarih?.seconds > latest.tarih?.seconds ? current : latest), { tarih: { seconds: 0 } });
+                const lastExamDate = lastExam.tarih.seconds > 0 ? new Date(lastExam.tarih.seconds * 1000).toLocaleString('tr-TR') : 'N/A';
+                const fullName = `${student.isim || ''} ${student.soyisim || ''}`;
+                const initials = `${student.isim?.charAt(0) || ''}${student.soyisim?.charAt(0) || ''}`.toUpperCase();
+
+                const row = document.createElement('tr');
+                row.dataset.studentId = student.userId;
+                row.innerHTML = `
+                    <td>
+                        <div class="student-info">
+                            <div class="student-avatar">${initials}</div>
+                            <div>
+                                <div class="student-name">${fullName.trim()}</div>
+                                <div class="last-exam-date">${student.userId}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${student.exams.length}</td>
+                    <td class="last-exam-date">${lastExamDate}</td>`;
+                ui.studentTableBody.appendChild(row);
+            });
+        }
+        
+        function renderStudentExamList(studentId) {
+            const student = allStudents[studentId];
+            if (!student) return;
+            currentOpenStudent = student;
+
+            const totalNet = student.exams.reduce((sum, exam) => sum + parseFloat(exam.netSayisi || 0), 0);
+            const avgNet = student.exams.length > 0 ? (totalNet / student.exams.length).toFixed(2) : "0.00";
+            const examTypes = student.exams.map(exam => exam.sinavTuru);
+            const mostFrequentType = examTypes.length > 0 ? examTypes.sort((a,b) => examTypes.filter(v => v===a).length - examTypes.filter(v => v===b).length).pop() : "Yok";
+
+            ui.modalTitle.textContent = `${student.isim} ${student.soyisim} - Sınav Geçmişi`;
+            ui.modalStudentSummary.innerHTML = `
+                <div class="student-summary-header">
+                    <h3>${student.isim} ${student.soyisim}</h3>
+                    <div class="student-summary-stats">
+                        <div class="stat">Toplam Sınav: <strong>${student.exams.length}</strong></div>
+                        <div class="stat">Ortalama Net: <strong>${avgNet}</strong></div>
+                        <div class="stat">En Sık Çözülen: <strong>${mostFrequentType.replace(/_/g, ' ')}</strong></div>
+                    </div>
+                </div>`;
+            
+            ui.modalExamList.innerHTML = '';
+            ui.modalExamDetail.style.display = 'none';
+            ui.modalExamList.style.display = 'block';
+
+            const sortedExams = [...student.exams].sort((a, b) => (b.tarih?.seconds || 0) - (a.tarih?.seconds || 0));
+            sortedExams.forEach(exam => {
+                const examDate = exam.tarih?.seconds ? new Date(exam.tarih.seconds * 1000).toLocaleString('tr-TR', { day: '2-digit', month: 'long', hour: '2-digit', minute: '2-digit' }) : 'Bilinmiyor';
+                const examType = (exam.sinavTuru || 'Bilinmiyor');
+                const item = document.createElement('div');
+                item.className = 'exam-list-item';
+                item.dataset.examId = exam.id;
+                item.style.borderLeftColor = `var(--${examType.toLowerCase()}-color, var(--text-light))`;
+                item.innerHTML = `
+                    <div class="info">
+                        <div class="title">${examType.replace(/_/g, ' ').toUpperCase()}</div>
+                        <div class="date">${examDate}</div>
+                    </div>
+                    <div class="exam-actions">
+                        <div class="exam-stats">
+                            <span class="stat-detail dogru">D: <strong>${exam.dogruSayisi}</strong></span>
+                            <span class="stat-detail yanlis">Y: <strong>${exam.yanlisSayisi}</strong></span>
+                            <span class="stat-detail bos">B: <strong>${exam.bosSayisi}</strong></span>
+                            <span class="stat-detail net">Net: <strong>${exam.netSayisi}</strong></span>
+                        </div>
+                        <button class="delete-exam-btn" title="Bu sınavı sil">${ICONS.DELETE}</button>
+                    </div>`;
+                ui.modalExamList.appendChild(item);
+            });
+            ui.modal.classList.add('show');
+        }
+
+        async function handleDeleteSingleExam(userId, examId) {
+            if (!confirm("Bu sınav sonucunu kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz.")) return;
+            
+            const examDocRef = doc(db, "kullanicilar", userId, "sinavlar", examId);
+            try {
+                await deleteDoc(examDocRef);
+                console.log("Sınav başarıyla silindi:", examId);
+                // Arayüzü anında güncellemek için yerel veriden silip yeniden render et
+                const student = allStudents[userId];
+                if (student) {
+                    student.exams = student.exams.filter(exam => exam.id !== examId);
+                    renderStudentExamList(userId); // Modalı yenile
+                }
+            } catch (error) {
+                console.error("Sınav silinirken hata:", error);
+                alert("Sınav silinirken bir hata oluştu.");
+            }
+        }
+
+        function renderExamDetailView(exam) {
+            currentOpenExam = exam;
+            ui.modalTitle.textContent = `${currentOpenStudent.isim} ${currentOpenStudent.soyisim} - Sınav Detayı`;
+            ui.modalExamList.style.display = 'none';
+            ui.modalExamDetail.style.display = 'block';
+            const questionsHtml = (exam.sorular || []).map((soru, index) => {
+                const ogrenciCevabi = exam.ogrenciCevaplari?.[soru.id] || '';
+                const dogruCevap = soru.dogruCevap;
+                const optionsHtml = (soru.secenekler || []).map((optionText, i) => {
+                    const optionLetter = String.fromCharCode(65 + i);
+                    let optionClass = 'q-option';
+                    let icon = '';
+                    if (optionLetter.toUpperCase() === (dogruCevap || '').toUpperCase()) {
+                        optionClass += ' correct-answer';
+                        icon = `<span class="q-option-icon">✔</span>`;
+                    }
+                    if (optionLetter.toUpperCase() === (ogrenciCevabi || '').toUpperCase() && (ogrenciCevabi || '').toUpperCase() !== (dogruCevap || '').toUpperCase()) {
+                        optionClass += ' student-answer-incorrect';
+                        icon = `<span class="q-option-icon">✗</span>`;
+                    }
+                    return `<li class="${optionClass}">${icon || '<span class="q-option-icon"></span>'}<div><b>${optionLetter})</b> ${optionText}</div></li>`;
+                }).join('');
+                return `<div class="question-item"><div class="q-text"><b>${index + 1}.</b> ${soru.metin}</div><ul class="q-options-list">${optionsHtml}</ul></div>`;
+            }).join('') || '<div class="placeholder-text">Soru detayı bulunamadı.</div>';
+            
+            ui.modalExamDetail.innerHTML = `
+                <div id="modal-exam-detail-header">
+                    <h3>${(exam.sinavTuru || '').replace(/_/g, ' ').toUpperCase()} Sonuçları</h3>
+                    <button id="print-btn" class="btn btn-danger">Yazdır / PDF Olarak Kaydet</button>
+                </div>
+                <div id="printable-content">${questionsHtml}</div>`;
+        }
+        
+        function handlePrint(exam) {
+            const examDate = exam.tarih?.seconds ? new Date(exam.tarih.seconds * 1000).toLocaleString('tr-TR') : "Bilinmeyen Tarih";
+            const questionsContent = document.getElementById('printable-content').innerHTML;
+
+            const printHtml = `
+                <html><head><title>Sınav Sonuç Belgesi - ${currentOpenStudent.isim} ${currentOpenStudent.soyisim}</title>
+                <style>@page { margin: 1.5cm; } body { font-family: 'Times New Roman', Times, serif; font-size: 11pt; color: #000; } #printable-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px; } #printable-header h3 { font-size: 16pt; margin: 0 0 10px 0; } #printable-header h4 { font-size: 14pt; margin: 0 0 10px 0; font-weight: normal; } #printable-header p { font-size: 11pt; margin: 0; color: #444; } #printable-summary { display: flex; justify-content: center; gap: 30px; margin-bottom: 25px; padding: 10px; border: 1px solid #ccc; border-radius: 8px; } #printable-summary .summary-item { text-align: center; font-size: 12pt; } #printable-summary .summary-item strong { font-size: 14pt; display: block; } .question-item { page-break-inside: avoid; margin-bottom: 15px; padding-top: 10px; border-bottom: 1px dotted #ccc; } .q-text { font-size: 12pt; margin-bottom: 10px; font-weight: bold; } .q-options-list { list-style: none; padding-left: 0; margin-left: 15px; } .q-option { display: flex !important; align-items: flex-start !important; padding: 2px 0; } .q-option div { padding-left: 5px; } .correct-answer { font-weight: bold; } .student-answer-incorrect { text-decoration: line-through; color: #555; } .q-option-icon { width: 15px; flex-shrink: 0; font-family: sans-serif; font-weight: bold; }</style>
+                </head><body>
+                    <div id="printable-header">
+                        <h4>${(exam.sinavTuru || 'Test').replace(/_/g, ' ')} Sınavı Sonuç Belgesi</h4>
+                        <p><strong>Öğrenci:</strong> ${currentOpenStudent.isim} ${currentOpenStudent.soyisim} | <strong>Tarih:</strong> ${examDate}</p>
+                    </div>
+                    <div id="printable-summary">
+                        <div class="summary-item">Doğru<strong>${exam.dogruSayisi}</strong></div>
+                        <div class="summary-item">Yanlış<strong>${exam.yanlisSayisi}</strong></div>
+                        <div class="summary-item">Boş<strong>${exam.bosSayisi}</strong></div>
+                        <div class="summary-item">Net<strong>${exam.netSayisi}</strong></div>
+                    </div>
+                    ${questionsContent}
+                </body></html>`;
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(printHtml);
+            printWindow.document.close();
+            setTimeout(() => { printWindow.print(); printWindow.close(); }, 250);
+        }
+
+        ui.loginForm.addEventListener('submit', async e => {
+            e.preventDefault();
+            ui.loginError.style.display = 'none';
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                ui.loginError.textContent = "E-posta veya şifre hatalı.";
+                ui.loginError.style.display = 'block';
+            }
+        });
+
+        ui.logoutBtn.addEventListener('click', () => signOut(auth));
+        ui.searchInput.addEventListener('input', updateDashboard);
+        ui.studentTableBody.addEventListener('click', e => {
+            const row = e.target.closest('tr');
+            if (row?.dataset.studentId) renderStudentExamList(row.dataset.studentId);
+        });
+        ui.modal.addEventListener('click', e => {
+            if (e.target === ui.modal || e.target.closest('.modal-close-btn')) ui.modal.classList.remove('show');
+            
+            const examInfo = e.target.closest('.exam-list-item')?.querySelector('.info');
+            if(examInfo && currentOpenStudent) {
+                const examId = examInfo.parentElement.dataset.examId;
+                const selectedExam = currentOpenStudent.exams.find(ex => ex.id === examId);
+                if(selectedExam) renderExamDetailView(selectedExam);
+            }
+
+            const deleteBtn = e.target.closest('.delete-exam-btn');
+            if(deleteBtn && currentOpenStudent) {
+                const examId = deleteBtn.parentElement.parentElement.dataset.examId;
+                handleDeleteSingleExam(currentOpenStudent.userId, examId);
+            }
+
+            if(e.target.closest('#print-btn') && currentOpenExam) handlePrint(currentOpenExam);
+        });
     </script>
 </body>
 </html>
